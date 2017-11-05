@@ -6,6 +6,7 @@ import javax.faces.bean.ViewScoped;
 
 import co.b2bginebra.logica.UsuarioLogica;
 import co.b2bginebra.modelo.Usuario;
+import net.bootsfaces.component.inputText.InputText;
 
 /**
  * representa la vista para el inicio de sesion
@@ -16,8 +17,8 @@ import co.b2bginebra.modelo.Usuario;
 public class LoginVista
 {
 	
-	private String txtNombreUsuario;
-	private String txtPassword;
+	private InputText txtNombreUsuario;
+	private InputText txtPassword;
 	
 	@EJB
 	private UsuarioLogica usuarioLogica;
@@ -28,7 +29,7 @@ public class LoginVista
 	{
 		try 
 		{
-			usuLogueado = usuarioLogica.validarUsuario(txtNombreUsuario, txtPassword);
+			usuLogueado = usuarioLogica.validarUsuario(txtNombreUsuario.getValue().toString(), txtPassword.getValue().toString());
 			
 		} 
 		catch (Exception e) 
@@ -38,35 +39,30 @@ public class LoginVista
 		
 	}
 
-
-	public String getTxtNombreUsuario() {
+	public InputText getTxtNombreUsuario() {
 		return txtNombreUsuario;
 	}
 
-
-	public void setTxtNombreUsuario(String txtNombreUsuario) {
+	public void setTxtNombreUsuario(InputText txtNombreUsuario) {
 		this.txtNombreUsuario = txtNombreUsuario;
 	}
 
-
-	public String getTxtPassword() {
+	public InputText getTxtPassword() {
 		return txtPassword;
 	}
 
-
-	public void setTxtPassword(String txtPassword) {
+	public void setTxtPassword(InputText txtPassword) {
 		this.txtPassword = txtPassword;
 	}
-
 
 	public Usuario getUsuLogueado() {
 		return usuLogueado;
 	}
 
-
 	public void setUsuLogueado(Usuario usuLogueado) {
 		this.usuLogueado = usuLogueado;
 	}
+
 	
 	
 	

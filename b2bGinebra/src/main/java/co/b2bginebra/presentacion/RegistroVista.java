@@ -4,8 +4,12 @@ import java.util.Date;
 
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.event.FileUploadEvent;
 
 import co.b2bginebra.logica.EstadoLogica;
 import co.b2bginebra.logica.NegocioLogica;
@@ -16,6 +20,7 @@ import co.b2bginebra.modelo.Estado;
 import co.b2bginebra.modelo.Negocio;
 import co.b2bginebra.modelo.SolicitudReg;
 import co.b2bginebra.modelo.Usuario;
+import net.bootsfaces.component.inputText.InputText;
 
 
 /**
@@ -28,22 +33,21 @@ import co.b2bginebra.modelo.Usuario;
 public class RegistroVista
 {
 	//Datos del usuario
-	private String txtUsuNombre;
-	private String txtUsuIdentificacion;
-	private String txtUsuTelefono;
-	private String txtUsuDireccion;
-	private String txtUsuCorreo;
-	private String txtUsuPassword;
+	private InputText txtUsuNombre;
+	private InputText txtUsuIdentificacion;
+	private InputText txtUsuTelefono;
+	private InputText txtUsuDireccion;
+	private InputText txtUsuCorreo;
+	private InputText txtUsuPassword;
 	
 	//Datos del negocio
-	private String txtNegRazonSocial;
-	private String txtNegDireccion;
-	private String txtNegTelefono;
-	private String txtNegSitioWeb;
-	private String txtNegCorreo;
-	private String txtNegDescripcion;
-	//private String imagen;
-	
+	private InputText txtNegRazonSocial;
+	private InputText txtNegDireccion;
+	private InputText txtNegTelefono;
+	private InputText txtNegSitioWeb;
+	private InputText txtNegCorreo;
+	private InputText txtNegDescripcion;
+	private byte[] imagen;
 	
 	//logica de negocio
 	@EJB
@@ -61,29 +65,14 @@ public class RegistroVista
 	{
 		try
 		{
-			//creacion del usuario
-			Usuario usuNuevo = new Usuario();
-			usuNuevo.setNombre(txtUsuNombre.trim());
-			usuNuevo.setIdentificacion(txtUsuIdentificacion.trim());
-			usuNuevo.setTelefono(txtUsuTelefono.trim());
-			usuNuevo.setDireccion(txtUsuDireccion.trim());
-			usuNuevo.setCorreo(txtUsuCorreo.trim());
-			usuNuevo.setPassword(txtUsuPassword.trim());
+			Usuario usuNuevo = crearUsuario();
 			
-			//creacion del negocio
-			Negocio negocioNuevo = new Negocio();
-			negocioNuevo.setRazonSocial(txtNegRazonSocial.trim());
-			negocioNuevo.setDireccion(txtNegDireccion.trim());
-			negocioNuevo.setTelefono(txtNegTelefono.trim());
-			negocioNuevo.setSitioWeb(txtNegSitioWeb.trim());
-			negocioNuevo.setCorreo(txtNegCorreo.trim());
-			negocioNuevo.setDescripcion(txtNegDescripcion.trim());
-			//negocioNuevo.setImgPrincipal(imgPrincipal);
-			
+			Negocio negocioNuevo = crearNegocio();
 			negocioNuevo.setUsuario(usuNuevo);
 			
 			//se busca usuario-negocio en la tabla de negocios registrados
 			boolean estaRegistrado = negocioRegistradoLogica.estaRegistradoNegocioConUsuario(usuNuevo, negocioNuevo);
+			
 			if(estaRegistrado == false)
 			{
 				//el usuario y el negocio quedan como inactivos
@@ -113,6 +102,8 @@ public class RegistroVista
 				
 				usuarioLogica.crearUsuario(usuNuevo);
 				negocioLogica.crearNegocio(negocioNuevo);
+				
+				//TODO Se manda correo de alerta al correo institucional de que la cuenta quedo activa
 			}
 			
 		}
@@ -120,5 +111,53 @@ public class RegistroVista
 		{
 			
 		}
+	}
+	
+	public Usuario crearUsuario()
+	{
+		Usuario usuNuevo = new Usuario();
+		usuNuevo.setNombre(txtUsuNombre.getValue().toString().trim());
+		usuNuevo.setIdentificacion(txtUsuIdentificacion.getValue().toString().trim());
+		usuNuevo.setTelefono(txtUsuTelefono.getValue().toString().trim());
+		usuNuevo.setDireccion(txtUsuDireccion.getValue().toString().trim());
+		usuNuevo.setCorreo(txtUsuCorreo.getValue().toString().trim());
+		usuNuevo.setPassword(txtUsuPassword.getValue().toString().trim());
+		
+		return usuNuevo;
+	}
+	
+	public Negocio crearNegocio()
+	{
+		Negocio negocioNuevo = new Negocio();
+		negocioNuevo.setRazonSocial(txtNegRazonSocial.getValue().toString().trim());
+		negocioNuevo.setDireccion(txtNegDireccion.getValue().toString().trim());
+		negocioNuevo.setTelefono(txtNegTelefono.getValue().toString().trim());
+		negocioNuevo.setSitioWeb(txtNegSitioWeb.getValue().toString().trim());
+		negocioNuevo.setCorreo(txtNegCorreo.getValue().toString().trim());
+		negocioNuevo.setDescripcion(txtNegDescripcion.getValue().toString().trim());
+		negocioNuevo.setImgPrincipal(imagen);
+		
+		return negocioNuevo;
+	}
+	
+	
+	
+	public void subirImagen(FileUploadEvent event)
+	{
+		FacesMessage mensaje = new FacesMessage();
+	
+		try 
+		{	
+			imagen = event.getFile().getContents();
+			
+			mensaje.setSeverity(FacesMessage.SEVERITY_INFO);
+			mensaje.setSummary("Imagen subida correctamente");
+		} 
+		catch (Exception e)
+		{
+			mensaje.setSeverity(FacesMessage.SEVERITY_ERROR);
+			mensaje.setSummary("Error al subir la imagen");		
+		}
+		FacesContext.getCurrentInstance().addMessage("Mensaje", mensaje);
 	}
 }

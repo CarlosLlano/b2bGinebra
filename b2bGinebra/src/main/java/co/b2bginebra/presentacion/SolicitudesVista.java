@@ -3,8 +3,12 @@ package co.b2bginebra.presentacion;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.event.SelectEvent;
 
 import co.b2bginebra.logica.EstadoLogica;
 import co.b2bginebra.logica.NegocioRegistradoLogica;
@@ -43,46 +47,75 @@ public class SolicitudesVista
 		Negocio negocio = solicitudRegSeleccionada.getNegocio();
 		Usuario usuario = negocio.getUsuario();
 		
+		FacesMessage mensaje = new FacesMessage();
+		
 		try 
 		{
 			boolean estaRegistrado = negocioRegistradoLogica.estaRegistradoNegocioConUsuario(usuario, negocio);
 			
+			
 			if(estaRegistrado)
 			{
-				//TODO mensaje informativo
+				
+				mensaje.setSeverity(FacesMessage.SEVERITY_INFO);
+				mensaje.setSummary("La solicitud puede ser aceptada");
 			}
 			else
 			{
-				//TODO mensaje informativo
+				mensaje.setSeverity(FacesMessage.SEVERITY_INFO);
+				mensaje.setSummary("Es necesario verificar los datos");		
 			}
 		} 
 		catch (Exception e) 
 		{
-			//TODO mensaje de error
+			mensaje.setSeverity(FacesMessage.SEVERITY_ERROR);
+			mensaje.setSummary("Ocurrio un error");
 		}
+		finally
+		{
+			FacesContext.getCurrentInstance().addMessage("Mensaje", mensaje);
+		}
+		
 	}
 
 	public void aceptarSolicitud()
 	{
+		FacesMessage mensaje = new FacesMessage();
 		try 
 		{
 			solicitudRegLogica.aceptar(solicitudRegSeleccionada);
+			mensaje.setSeverity(FacesMessage.SEVERITY_INFO);
+			mensaje.setSummary("Solicitud aceptada correctamente");
 		} 
 		catch (Exception e) 
 		{
-			//TODO mensaje informativo
+			
+			mensaje.setSeverity(FacesMessage.SEVERITY_ERROR);
+			mensaje.setSummary("Ocurrio un error");
 		}		
+		finally
+		{
+			FacesContext.getCurrentInstance().addMessage("Mensaje", mensaje);
+		}
 	}
 
 	public void rechazarSolicitud()
 	{
+		FacesMessage mensaje = new FacesMessage();
 		try 
 		{
 			solicitudRegLogica.rechazar(solicitudRegSeleccionada);
+			mensaje.setSeverity(FacesMessage.SEVERITY_INFO);
+			mensaje.setSummary("Solicitud rechazada correctamente");
 		} 
 		catch (Exception e) 
 		{
-			//TODO mensaje informativo
+			mensaje.setSeverity(FacesMessage.SEVERITY_ERROR);
+			mensaje.setSummary("Ocurrio un error");
+		}
+		finally
+		{
+			FacesContext.getCurrentInstance().addMessage("Mensaje", mensaje);
 		}
 
 	}
@@ -113,6 +146,12 @@ public class SolicitudesVista
 
 	public void setSolicitudRegSeleccionada(SolicitudReg solicitudRegSeleccionada) {
 		this.solicitudRegSeleccionada = solicitudRegSeleccionada;
+	}
+	
+	public void seleccionarSolicitud(SelectEvent event)
+	{
+		solicitudRegSeleccionada = (SolicitudReg)event.getObject();
+		
 	}
 	
 	
