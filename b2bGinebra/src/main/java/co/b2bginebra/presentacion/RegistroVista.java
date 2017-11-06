@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import org.primefaces.event.FileUploadEvent;
 
 import co.b2bginebra.logica.EstadoLogica;
+import co.b2bginebra.logica.GestionCorreosLogica;
 import co.b2bginebra.logica.NegocioLogica;
 import co.b2bginebra.logica.NegocioRegistradoLogica;
 import co.b2bginebra.logica.SolicitudRegLogica;
@@ -60,6 +61,8 @@ public class RegistroVista
 	private NegocioRegistradoLogica negocioRegistradoLogica;
 	@EJB
 	private EstadoLogica estadoLogica;
+	@EJB
+	private GestionCorreosLogica gestionCorreosLogica;
 	
 	public void registrar()
 	{
@@ -91,7 +94,10 @@ public class RegistroVista
 				solicitudReg.setEstado(estadoLogica.consultarEstadoPorNombre("Enviada"));
 				solicitudRegLogica.crearSolicitudReg(solicitudReg);			
 				
-				//TODO Se manda correo de alerta al correo institucional de que se creo una solicitud
+				//Se manda correo a la Alcaldia informando de que se creo una solicitud de registro
+				gestionCorreosLogica.enviarCorreoSolicitudCreada(solicitudReg);
+				mostrarMensaje("Su solicitud de registro ha sido enviada. En menos de una semana, tendra una respuesta al correo especificado");	
+				
 			}
 			else
 			{
@@ -103,8 +109,11 @@ public class RegistroVista
 				usuarioLogica.crearUsuario(usuNuevo);
 				negocioLogica.crearNegocio(negocioNuevo);
 				
-				//TODO Se manda correo de alerta al correo institucional de que la cuenta quedo activa
+				
+				mostrarMensaje("Cuenta activada exitosamente");
+				
 			}
+				
 			
 		}
 		catch(Exception e)
@@ -158,6 +167,14 @@ public class RegistroVista
 			mensaje.setSeverity(FacesMessage.SEVERITY_ERROR);
 			mensaje.setSummary("Error al subir la imagen");		
 		}
+		FacesContext.getCurrentInstance().addMessage("Mensaje", mensaje);
+	}
+	
+	public void mostrarMensaje(String msg)
+	{
+		FacesMessage mensaje = new FacesMessage();
+		mensaje.setSeverity(FacesMessage.SEVERITY_INFO);
+		mensaje.setSummary(msg);
 		FacesContext.getCurrentInstance().addMessage("Mensaje", mensaje);
 	}
 }

@@ -81,7 +81,7 @@ public class SolicitudRegLogica
 		//se cambia el estado
 		solicitud.setEstado(estadoLogica.consultarEstadoPorNombre("Aceptada"));
 
-		//se le asigna respuesta
+		//se le asigna una respuesta generica almacenada en la base de datos 
 		String respuesta = parametroSistemaLogica.consultarParametroPorNombre("Mensaje de solicitud aceptada").getValor();
 		solicitud.setRespuesta(respuesta);
 
@@ -99,18 +99,19 @@ public class SolicitudRegLogica
 		usuarioLogica.modificarUsuario(usuario);
 
 		//enviar correo
-		gestionCorreosLogica.enviarRespuestaSolicitud(solicitud);
+		gestionCorreosLogica.enviarCorreoSolicitudAceptada(solicitud);
 	}
 
+	/**
+	 * IMPORTANTE: 
+	 * La respuesta a la solicitud rechazada debe ser especificada por la Alcaldia. 
+	 * Es necesario saber especificamente porque una solicitud fue rechazada
+	 */
 	public void rechazar(SolicitudReg solicitud) throws Exception
 	{
 		//se cambia el estado
 		solicitud.setEstado(estadoLogica.consultarEstadoPorNombre("Rechazada"));
-
-		//se le asigna respuesta
-		String respuesta = parametroSistemaLogica.consultarParametroPorNombre("Mensaje de solicitud rechazada").getValor();
-		solicitud.setRespuesta(respuesta);
-
+	
 		//se cambia el estado del usuario y negocio
 		Negocio negocio = solicitud.getNegocio();
 		Usuario usuario = negocio.getUsuario();
@@ -125,7 +126,7 @@ public class SolicitudRegLogica
 		usuarioLogica.modificarUsuario(usuario);
 		
 		//enviar correo
-		gestionCorreosLogica.enviarRespuestaSolicitud(solicitud);
+		gestionCorreosLogica.enviarCorreoSolicitudRechazada(solicitud);
 	}
 
 }

@@ -97,13 +97,17 @@ public class UsuarioLogica
 		{
 			throw new Exception("Usuario o password no valido");
 		}
-		if(usuario.getPassword().equals(usuClave)==true)
+		else if(usuario.getPassword().equals(usuClave)==false)
 		{
-			return usuario;
+			throw new Exception("Usuario o password no valido");
+		}
+		else if(usuario.getEstado().getNombre().equals("Activo")==false)
+		{
+			throw new Exception("La cuenta esta bloqueada");
 		}
 		else
 		{
-			throw new Exception("Usuario o password no valido");
+			return usuario;
 		}
 	}
 

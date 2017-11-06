@@ -16,6 +16,7 @@ import co.b2bginebra.logica.SolicitudRegLogica;
 import co.b2bginebra.modelo.Negocio;
 import co.b2bginebra.modelo.SolicitudReg;
 import co.b2bginebra.modelo.Usuario;
+import net.bootsfaces.component.inputTextarea.InputTextarea;
 
 /**
  * representa la vista para la gestion de solicitudes
@@ -37,6 +38,8 @@ public class SolicitudesVista
 	private EstadoLogica estadoLogica;
 
 	private SolicitudReg solicitudRegSeleccionada;
+	
+	private InputTextarea txtRespuesta;
 
 
 	/**
@@ -104,6 +107,7 @@ public class SolicitudesVista
 		FacesMessage mensaje = new FacesMessage();
 		try 
 		{
+			solicitudRegSeleccionada.setRespuesta(txtRespuesta.getValue().toString());
 			solicitudRegLogica.rechazar(solicitudRegSeleccionada);
 			mensaje.setSeverity(FacesMessage.SEVERITY_INFO);
 			mensaje.setSummary("Solicitud rechazada correctamente");
@@ -152,6 +156,14 @@ public class SolicitudesVista
 	{
 		solicitudRegSeleccionada = (SolicitudReg)event.getObject();
 		
+	}
+	
+	public InputTextarea getTxtRespuesta() {
+		return txtRespuesta;
+	}
+
+	public void setTxtRespuesta(InputTextarea txtRespuesta) {
+		this.txtRespuesta = txtRespuesta;
 	}
 	
 	
