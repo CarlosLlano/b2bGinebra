@@ -20,6 +20,24 @@ public class GestionCorreosLogica
 	private ParametroSistemaLogica parametroSistemaLogica;
 
 
+	public void enviarCorreo(String destinatarios, String Asunto, String mensaje)
+	{
+		try 
+		{
+			//Parametros de envio
+			String sender = parametroSistemaLogica.consultarParametroPorNombre("Correo Institucional").getValor();
+			String mailhost = parametroSistemaLogica.consultarParametroPorNombre("host-correo").getValor();
+			String userId = parametroSistemaLogica.consultarParametroPorNombre("UserId-correo").getValor();
+			String password = parametroSistemaLogica.consultarParametroPorNombre("Password-correo").getValor();
+			
+			sendMail(Asunto, mensaje, sender, destinatarios, mailhost, userId, password);
+		} 
+		catch (Exception e) 
+		{
+			
+		}
+	}
+	
 	public void enviarCorreoSolicitudCreada(SolicitudReg solicitudReg)
 	{
 		try 
