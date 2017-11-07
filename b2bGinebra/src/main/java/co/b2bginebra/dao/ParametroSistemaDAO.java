@@ -18,6 +18,11 @@ public class ParametroSistemaDAO extends JpaDaoImpl<ParametroSistema, Long>{
     @PersistenceContext
     private EntityManager entityManager;
     
+    public ParametroSistemaDAO()
+    {
+    		super(ParametroSistema.class);
+    }
+    
     public ParametroSistema consultarParametroPorNombre(String nombre)
     {
     		String jpql = "SELECT p FROM ParametroSistema p WHERE p.nombre=:nombre";

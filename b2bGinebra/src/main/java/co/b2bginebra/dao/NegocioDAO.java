@@ -16,4 +16,10 @@ public class NegocioDAO extends JpaDaoImpl<Negocio, Long>{
 
     @PersistenceContext
     private EntityManager entityManager;
+    
+    public NegocioDAO()
+	{
+		super(Negocio.class);
+	}
+    
 }

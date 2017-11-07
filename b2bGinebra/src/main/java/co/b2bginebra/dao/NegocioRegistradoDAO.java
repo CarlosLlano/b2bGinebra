@@ -1,14 +1,12 @@
 package co.b2bginebra.dao;
 
 
-import co.b2bginebra.modelo.NegocioRegistrado;
-import co.b2bginebra.dao.api.JpaDaoImpl;
-
-
 import javax.ejb.Stateless;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import co.b2bginebra.dao.api.JpaDaoImpl;
+import co.b2bginebra.modelo.NegocioRegistrado;
 
 
 @Stateless
@@ -16,6 +14,11 @@ public class NegocioRegistradoDAO extends JpaDaoImpl<NegocioRegistrado, Long>{
 
     @PersistenceContext
     private EntityManager entityManager;
+    
+    public NegocioRegistradoDAO()
+	{
+		super(NegocioRegistrado.class);
+	}
     
     public boolean estaRegistradoNegocioConUsuario(String razonSocial, String docRepr)
     {
