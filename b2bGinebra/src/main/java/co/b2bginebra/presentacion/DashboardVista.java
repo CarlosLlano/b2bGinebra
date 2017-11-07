@@ -3,7 +3,6 @@ package co.b2bginebra.presentacion;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -29,22 +28,8 @@ public class DashboardVista
 	private List<StatTipoNegocio> statTipoNegocios;
 	@EJB
 	private TipoNegocioLogica tipoNegocioLogica;
-	
-	
-	@PostConstruct
-	public void init()
-	{
-		getLosTipoNegocio();
-		
-		//creo las clases estadisticas
-		statTipoNegocios = new ArrayList<StatTipoNegocio>();
-		for (TipoNegocio tipoNegocio : losTipoNegocio) 
-		{
-			statTipoNegocios.add(new StatTipoNegocio(tipoNegocio.getNombre(), tipoNegocio.getNegocios().size()));
-		} 
-	} 
-	
-	
+
+
 	public List<TipoNegocio> getLosTipoNegocio() 
 	{
 		try 
@@ -56,18 +41,37 @@ public class DashboardVista
 		} 
 		catch (Exception e) 
 		{
-			
+
 		}
 		return losTipoNegocio;
 	}
 	public void setLosTipoNegocio(List<TipoNegocio> losTipoNegocio) {
 		this.losTipoNegocio = losTipoNegocio;
 	}
-	
-	
-	
-	
-	
+
+
+	public List<StatTipoNegocio> getStatTipoNegocios() 
+	{
+		if(statTipoNegocios==null)
+		{
+			statTipoNegocios = new ArrayList<StatTipoNegocio>();
+			for (TipoNegocio tipoNegocio : getLosTipoNegocio()) 
+			{
+				statTipoNegocios.add(new StatTipoNegocio(tipoNegocio.getNombre(), tipoNegocio.getNegocios().size()));
+			}
+		}
+		return statTipoNegocios;
+	}
+
+
+	public void setStatTipoNegocios(List<StatTipoNegocio> statTipoNegocios) {
+		this.statTipoNegocios = statTipoNegocios;
+	}
+
+
+
+
+
 }
 
 

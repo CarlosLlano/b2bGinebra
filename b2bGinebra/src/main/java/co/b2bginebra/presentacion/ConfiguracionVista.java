@@ -2,11 +2,12 @@ package co.b2bginebra.presentacion;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+
 import org.primefaces.event.SelectEvent;
+
 import co.b2bginebra.logica.ParametroSistemaLogica;
 import co.b2bginebra.modelo.ParametroSistema;
 import net.bootsfaces.component.inputText.InputText;

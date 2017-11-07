@@ -13,12 +13,9 @@ import javax.faces.model.SelectItem;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
-import org.w3c.dom.ls.LSOutput;
 
 import co.b2bginebra.logica.NotificacionLogica;
 import co.b2bginebra.logica.TipoNotLogica;
-import co.b2bginebra.modelo.Imagen;
-import co.b2bginebra.modelo.Negocio;
 import co.b2bginebra.modelo.Notificacion;
 import co.b2bginebra.modelo.TipoNot;
 import net.bootsfaces.component.inputText.InputText;

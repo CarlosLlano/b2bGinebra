@@ -4,6 +4,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import co.b2bginebra.logica.GestionCorreosLogica;
 import co.b2bginebra.logica.UsuarioLogica;
 import co.b2bginebra.modelo.Usuario;
 import net.bootsfaces.component.inputText.InputText;
@@ -22,6 +23,8 @@ public class LoginVista
 	
 	@EJB
 	private UsuarioLogica usuarioLogica;
+	@EJB
+	private GestionCorreosLogica gestionCorreosLogica;
 	
 	private Usuario usuLogueado;
 	
@@ -37,6 +40,24 @@ public class LoginVista
 			// TODO: handle exception
 		}
 		
+	}
+	
+	/**
+	 * En caso de que el usuario no se acuerde de su clave,
+	 * se le enviara un correo con una clave aleatoria unica
+	 * que se recomienda cambiar
+	 */
+	public void cambiarClave()
+	{
+		String claveTemporal = System.currentTimeMillis() + "";
+		
+		//TODO:cambiar password al usuario
+		String correo=null; //debe obtenerse de un modal
+		
+		//TODO:enviar correo
+		String mensaje = "Utilice la siguiente clave de ingreso para acceder a la plataforma: " + claveTemporal + "\n" +
+				"Se recomienda cambiar la clave tan pronto pueda acceder.";
+		gestionCorreosLogica.enviarCorreo(correo, "CAMBIO DE CONTRASEÑA", mensaje);
 	}
 
 	public InputText getTxtNombreUsuario() {

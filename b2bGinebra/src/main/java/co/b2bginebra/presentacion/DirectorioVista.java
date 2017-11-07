@@ -1,10 +1,8 @@
 package co.b2bginebra.presentacion;
 
 import java.io.ByteArrayInputStream;
-
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -17,7 +15,6 @@ import org.primefaces.model.StreamedContent;
 import co.b2bginebra.logica.NegocioLogica;
 import co.b2bginebra.logica.TipoNegocioLogica;
 import co.b2bginebra.modelo.Negocio;
-import co.b2bginebra.modelo.ParametroSistema;
 import co.b2bginebra.modelo.TipoNegocio;
 
 
