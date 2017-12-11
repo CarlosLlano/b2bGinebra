@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:b="http://bootsfaces.net/ui">
+<h:head>
+	<title>BootsFaces Basic Page</title>
+</h:head>
+<h:body>
+	<h:form>
+
+		<b:dataTable value="#{dashboardVista.losTipoNegocio}" var="tipo"
+			excel="true" csv="true" pdf="true" columnVisibility="true"
+			copy="true" print="true">
+			<b:dataTableColumn value="#{tipo.idTipoNegocio}" />
+			<b:dataTableColumn value="#{tipo.nombre}" />
+		</b:dataTable>
+
+
+		<div class="row">
+			<div class="col s12">
+				<p:dataGrid value="#{directorioVista.negocios}" var="obj" columns="3"
+					layout="grid" rows="12" paginator="true"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+					
+					<b:thumbnail>
+						<p:commandLink class="card-img-top">
+								<p:graphicImage value="#{directorioVista.image}" width="245" height="320">
+									<f:param name="negocioId" value="#{obj.idNegocio}" />
+								</p:graphicImage>
+						</p:commandLink>
+						<f:facet name="caption">
+							<div class="card-title" align="center">
+							<p>
+								<h:outputText value="#{obj.razonSocial}" style="font-weight:bold" />
+							</p>
+							</div>
+						</f:facet>
+					</b:thumbnail>
+					
+				</p:dataGrid>
+			</div>
+		</div>
+
+	</h:form>
+
+</h:body>
+</html>

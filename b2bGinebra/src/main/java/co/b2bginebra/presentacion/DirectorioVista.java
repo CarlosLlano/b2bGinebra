@@ -37,23 +37,40 @@ public class DirectorioVista
 	private NegocioLogica negocioLogica;
 	
 	private Negocio negocioSeleccionado;
-
-
-
-	public StreamedContent getImage() throws Exception 
+	
+	public StreamedContent getImage() 
 	{
-		FacesContext context = FacesContext.getCurrentInstance();
-
-		String negocioId = context.getExternalContext().getRequestParameterMap().get("negocioId");
-
-		if (negocioId == null) {
+		try 
+		{
+			System.out.println("ENTRO1");
+			FacesContext context = FacesContext.getCurrentInstance();
 			
-			return new DefaultStreamedContent();
+			System.out.println("SIGUE1");
+			
+			String negocioId = null;
+					
+		    System.out.println(context.getExternalContext().getRequestParameterMap().get("negocioId"));
+			
+			System.out.println("id?" + negocioId);
+			
+			if (negocioId == null) 
+			{	
+				return new DefaultStreamedContent();
+			}
+
+			Negocio negocio = negocioLogica.consultarNegocio(Long.valueOf(negocioId));
+			
+			System.out.println(negocio==null);
+			
+			return new DefaultStreamedContent(new ByteArrayInputStream(negocio.getImgPrincipal()));
+			
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
 		}
-
-		Negocio negocio = negocioLogica.consultarNegocio(Long.valueOf(negocioId));
-
-		return new DefaultStreamedContent(new ByteArrayInputStream(negocio.getImgPrincipal()));
+		return null;
+		
 	}
 	
 	

@@ -4,5 +4,8 @@
 .settings
 .DS_Store
 .project
-/WebContent/
+/WebContent/assets
+/WebContent/META-INF
+/WebContent/WEB-INF
 *.xml
+*.DS_Store
