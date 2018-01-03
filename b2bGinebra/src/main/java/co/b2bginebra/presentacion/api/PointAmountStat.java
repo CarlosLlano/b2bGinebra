@@ -1,18 +1,22 @@
 package co.b2bginebra.presentacion.api;
 
-public class StatTipoNegocio
+/**
+ *	Clase utilizada para generar estadisticas
+ *
+ */
+public class PointAmountStat implements Comparable<PointAmountStat>
 {
 
 	private String nombre;
 	private int cantidad;
 	
 	
-	public StatTipoNegocio()
+	public PointAmountStat()
 	{
 		
 	}
 	
-	public StatTipoNegocio(String nombre, int cantidad) {
+	public PointAmountStat(String nombre, int cantidad) {
         this.nombre = nombre;
         this.cantidad = cantidad;
     }
@@ -29,6 +33,17 @@ public class StatTipoNegocio
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
+
+	@Override
+	public int compareTo(PointAmountStat o) 
+	{
+		int cantidad=o.getCantidad();
+ 
+	    return cantidad-this.cantidad;
+
+	}
+
+	
 	
 	
 	
