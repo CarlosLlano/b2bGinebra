@@ -6,5 +6,4 @@
 .project
 /WebContent/assets
 /WebContent/META-INF
-*.xml
 *.DS_Store
