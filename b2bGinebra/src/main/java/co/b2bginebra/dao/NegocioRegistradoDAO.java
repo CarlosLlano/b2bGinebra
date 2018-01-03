@@ -1,6 +1,8 @@
 package co.b2bginebra.dao;
 
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,14 +24,24 @@ public class NegocioRegistradoDAO extends JpaDaoImpl<NegocioRegistrado, Long>{
     
     public boolean estaRegistradoNegocioConUsuario(String razonSocial, String docRepr)
     {
-    		boolean respuesta = false;
+    		boolean respuesta;
     		String jpql = "SELECT n FROM NegocioRegistrado n WHERE n.razonSocial=:razonSocial AND n.docRepr=:docRepr" ;
-		NegocioRegistrado negReg =  entityManager.createQuery(jpql, NegocioRegistrado.class).setParameter("razonSocial", razonSocial)
-				.setParameter("docRepr", docRepr).getSingleResult();
-		if(negReg != null)
+		List<NegocioRegistrado> negReg =  entityManager.createQuery(jpql, NegocioRegistrado.class).setParameter("razonSocial", razonSocial)
+				.setParameter("docRepr", docRepr).getResultList();
+		
+		if(negReg.isEmpty() == true)
 		{
-			respuesta = true; 
+			respuesta = false;  //La alcaldia no tiene constancia de la existencia de dicho negocio
 		}
+		else
+		{
+			respuesta = true; //La alcaldia si tiene constancia de la existencia de dicho negocio
+		}
+		
 		return respuesta;
+		
+	
+		
+	
     }
 }

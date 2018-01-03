@@ -15,7 +15,7 @@ public class NegocioRegistrado implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="NEGOCIO_REGISTRADO_IDNEGOCIOREGIST_GENERATOR", sequenceName="NEGOCIO_REGISTRADO")
+	@SequenceGenerator(name="NEGOCIO_REGISTRADO_IDNEGOCIOREGIST_GENERATOR", sequenceName="SEQ_NEGOCIO_REGISTRADO",allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="NEGOCIO_REGISTRADO_IDNEGOCIOREGIST_GENERATOR")
 	@Column(name="id_negocio_regist", unique=true, nullable=false, precision=7)
 	private long idNegocioRegist;

@@ -17,7 +17,7 @@ public class Notificacion implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="NOTIFICACION_IDNOTIFICACION_GENERATOR", sequenceName="NOTIFICACION")
+	@SequenceGenerator(name="NOTIFICACION_IDNOTIFICACION_GENERATOR", sequenceName="SEQ_NOTIFICACION",allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="NOTIFICACION_IDNOTIFICACION_GENERATOR")
 	@Column(name="id_notificacion", unique=true, nullable=false, precision=7)
 	private long idNotificacion;

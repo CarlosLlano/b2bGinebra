@@ -2,6 +2,8 @@ package co.b2bginebra.dao;
 
 
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,4 +22,12 @@ public class NotificacionDAO extends JpaDaoImpl<Notificacion, Long>{
 	{
 		super(Notificacion.class);
 	}
+    
+    public List<Notificacion> consultarNotificacionPorNegocio(Long idNegocio)
+    {
+    	
+    		String jpql = "SELECT n FROM Notificacion n WHERE n.negocio.idNegocio=:idNegocio";
+		return entityManager.createQuery(jpql, Notificacion.class).setParameter("idNegocio", idNegocio).getResultList();
+    }
+    
 }

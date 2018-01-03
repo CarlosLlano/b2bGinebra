@@ -3,6 +3,8 @@ package co.b2bginebra.dao;
 
 
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,6 +28,44 @@ public class UsuarioDAO extends JpaDaoImpl<Usuario, Long>{
     public Usuario consultarUsuarioPorIdentificacion(String identificacion)
     {
     		String jpql = "SELECT usu FROM Usuario usu WHERE usu.identificacion=:identificacion";
-		return entityManager.createQuery(jpql, Usuario.class).setParameter("identificacion", identificacion).getSingleResult();
+    		List<Usuario> usuarios = entityManager.createQuery(jpql, Usuario.class).setParameter("identificacion", identificacion).getResultList();
+    		if(usuarios.isEmpty())
+    		{
+    			return null;
+    		}
+    		else
+    		{
+    			return usuarios.get(0);
+    		}
+		
     }
+    
+    public Usuario consultarUsuarioPorCorreo(String correo)
+    {
+    		
+		String jpql = "SELECT usu FROM Usuario usu WHERE usu.correo=:correo";
+    		List<Usuario> usuarios = entityManager.createQuery(jpql, Usuario.class).setParameter("correo", correo).getResultList();
+    		if(usuarios.isEmpty())
+    		{
+    			return null;
+    		}
+    		else
+    		{
+    			return usuarios.get(0);
+    		}
+    }
+    
+    public List<Usuario> consultarUsuariosPorEstado(String nombreEstado)
+	{
+    		String jpql = "SELECT usu FROM Usuario usu WHERE usu.estado.nombre=:nombreEstado";
+		List<Usuario> usuarios = entityManager.createQuery(jpql, Usuario.class).setParameter("nombreEstado", nombreEstado).getResultList();
+		return usuarios;
+	}
+    
+	public List<Usuario> consultarUsuariosPorIdEstado(long idEstado)
+	{
+		String jpql = "SELECT usu FROM Usuario usu WHERE usu.estado.idEstado=:idEstado";
+		List<Usuario> usuarios = entityManager.createQuery(jpql, Usuario.class).setParameter("idEstado", idEstado).getResultList();
+		return usuarios;
+	}
 }

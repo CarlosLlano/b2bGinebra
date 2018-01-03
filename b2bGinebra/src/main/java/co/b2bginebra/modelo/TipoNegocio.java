@@ -1,7 +1,9 @@
 package co.b2bginebra.modelo;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.List;
 
 
@@ -16,7 +18,7 @@ public class TipoNegocio implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="TIPO_NEGOCIO_IDTIPONEGOCIO_GENERATOR", sequenceName="TIPO_NEGOCIO")
+	@SequenceGenerator(name="TIPO_NEGOCIO_IDTIPONEGOCIO_GENERATOR", sequenceName="SEQ_TIPO_NEGOCIO",allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="TIPO_NEGOCIO_IDTIPONEGOCIO_GENERATOR")
 	@Column(name="id_tipo_negocio", unique=true, nullable=false, precision=2)
 	private long idTipoNegocio;
@@ -25,7 +27,7 @@ public class TipoNegocio implements Serializable {
 	private String nombre;
 
 	//bi-directional many-to-one association to CategoriaProd
-	@OneToMany(mappedBy="tipoNegocio")
+	@OneToMany(fetch = FetchType.EAGER,mappedBy="tipoNegocio")
 	private List<CategoriaProd> categoriaProds;
 
 	//bi-directional many-to-one association to Negocio

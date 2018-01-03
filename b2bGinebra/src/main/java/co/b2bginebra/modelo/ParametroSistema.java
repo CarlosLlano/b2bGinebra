@@ -15,7 +15,7 @@ public class ParametroSistema implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="PARAMETRO_SISTEMA_IDPARAMETRO_GENERATOR", sequenceName="PARAMETRO_SISTEMA")
+	@SequenceGenerator(name="PARAMETRO_SISTEMA_IDPARAMETRO_GENERATOR", sequenceName="SEQ_PARAMETRO_SISTEMA",allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="PARAMETRO_SISTEMA_IDPARAMETRO_GENERATOR")
 	@Column(name="id_parametro", unique=true, nullable=false, precision=2)
 	private long idParametro;

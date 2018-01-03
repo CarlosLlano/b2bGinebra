@@ -74,10 +74,18 @@ public class SolicitudRegLogica
 	{
 		return solicitudRegDAO.consultarTodos();
 	}
+	
+	public List<SolicitudReg> consultarSolicitudPorEstado(long idEstado) throws Exception 
+	{
+		return solicitudRegDAO.consultarSolicitudPorEstado(idEstado);
+	}
 
 
 	public void aceptar(SolicitudReg solicitud) throws Exception
 	{
+		//se especifia la fecha de atencion
+		solicitud.setFechaAtencion(new Date());
+		
 		//se cambia el estado
 		solicitud.setEstado(estadoLogica.consultarEstadoPorNombre("Aceptada"));
 
@@ -109,6 +117,9 @@ public class SolicitudRegLogica
 	 */
 	public void rechazar(SolicitudReg solicitud) throws Exception
 	{
+		//se especifica la fecha de atencion
+		solicitud.setFechaAtencion(new Date());
+				
 		//se cambia el estado
 		solicitud.setEstado(estadoLogica.consultarEstadoPorNombre("Rechazada"));
 	
@@ -127,6 +138,11 @@ public class SolicitudRegLogica
 		
 		//enviar correo
 		gestionCorreosLogica.enviarCorreoSolicitudRechazada(solicitud);
+	}
+	
+	public List<SolicitudReg> consultarSolicitudesPorNombreEstado(String nombreEstado)
+	{
+		return solicitudRegDAO.consultarSolicitudesPorNombreEstado(nombreEstado);
 	}
 
 }

@@ -2,10 +2,8 @@ package co.b2bginebra.logica;
 
 import java.util.List;
 
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-
 
 import co.b2bginebra.dao.ImagenDAO;
 import co.b2bginebra.modelo.Imagen;
@@ -60,5 +58,10 @@ public class ImagenLogica
 	{
 		return imagenDAO.consultarTodos();
 	}
+	
+	public List<Imagen> consultarImagenesPorNegocio(Long idNegocio)
+    {
+		return imagenDAO.consultarImagenesPorNegocio(idNegocio);
+    }
 
 }

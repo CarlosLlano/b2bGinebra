@@ -1,21 +1,24 @@
 package co.b2bginebra.presentacion;
 
-import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 
+import co.b2bginebra.logica.CategoriaProdLogica;
 import co.b2bginebra.logica.NegocioLogica;
 import co.b2bginebra.logica.TipoNegocioLogica;
+import co.b2bginebra.modelo.CategoriaProd;
 import co.b2bginebra.modelo.Negocio;
 import co.b2bginebra.modelo.TipoNegocio;
+import net.bootsfaces.component.inputText.InputText;
+import net.bootsfaces.component.selectOneMenu.SelectOneMenu;
 
 
 /**
@@ -23,47 +26,112 @@ import co.b2bginebra.modelo.TipoNegocio;
  * La vista contiene un filtro de busqueda por tipo de negocio
  */
 
-@ManagedBean
+@ManagedBean(name="directorioVista")
 @ViewScoped
 public class DirectorioVista 
 {
 
-	private List<TipoNegocio> tipoNegocios;
+	
+	private SelectOneMenu somTipoNegocio;
+	private SelectOneMenu somCategoriaProd;
+	private InputText txtBuscar;
+	private List<SelectItem> tipoNegocios;
+	private List<SelectItem> categoriasProd;
 	private List<Negocio> negocios;
 
 	@EJB
 	private TipoNegocioLogica tipoNegocioLogica;
 	@EJB
+	private CategoriaProdLogica categoriaProdLogica;
+	@EJB
 	private NegocioLogica negocioLogica;
 	
 	private Negocio negocioSeleccionado;
+
 	
-	public StreamedContent getImage() 
+	public void somTipoNegocioOnChange()
 	{
 		try 
 		{
-			System.out.println("ENTRO1");
-			FacesContext context = FacesContext.getCurrentInstance();
-			
-			System.out.println("SIGUE1");
-			
-			String negocioId = null;
-					
-		    System.out.println(context.getExternalContext().getRequestParameterMap().get("negocioId"));
-			
-			System.out.println("id?" + negocioId);
-			
-			if (negocioId == null) 
-			{	
-				return new DefaultStreamedContent();
+			long id = Long.parseLong(somTipoNegocio.getValue().toString());
+			if(id < 0)
+			{
+				List<CategoriaProd> categoriasProd = categoriaProdLogica.consultarTodos();
+				actualizarCategoriaProd(categoriasProd);
 			}
+			else
+			{
+				TipoNegocio tipoNegocio = tipoNegocioLogica.consultarTipoNegocio(id);
+				
+				
+				List<CategoriaProd> categoriasProd = tipoNegocio.getCategoriaProds();
+				
+				actualizarCategoriaProd(categoriasProd);
+			}
+		} 
+		catch (Exception e) 
+		{
+			
+			e.printStackTrace();
+		}
+	
+	}
+	
+	public void actualizarCategoriaProd(List<CategoriaProd> pcategorias)
+	{
+		categoriasProd = new ArrayList<SelectItem>();
+		for (CategoriaProd categoriaProd : pcategorias) 
+		{
+			SelectItem item = new SelectItem(categoriaProd.getIdCategoria(), categoriaProd.getNombre());
+			categoriasProd.add(item);
+		}	
 
-			Negocio negocio = negocioLogica.consultarNegocio(Long.valueOf(negocioId));
+	}
+	
+	public void buscarAction()
+	{
+		try 
+		{
+			long idTipoNegocio = Long.parseLong(somTipoNegocio.getValue().toString());
+			long idCategoriaProd = Long.parseLong(somCategoriaProd.getValue().toString());
+			String nombre = txtBuscar.getValue().toString().trim();
 			
-			System.out.println(negocio==null);
+			negocios = negocioLogica.consultarPorTipoCategoriaYNombre(idTipoNegocio, idCategoriaProd, nombre);
+		} 
+		catch (Exception e) 
+		{
 			
-			return new DefaultStreamedContent(new ByteArrayInputStream(negocio.getImgPrincipal()));
-			
+			e.printStackTrace();
+		}
+	}
+	
+	public void limpiarAction()
+	{
+		somTipoNegocio.setValue("-1");
+		somCategoriaProd.setValue("-1");
+		txtBuscar.resetValue();
+		try 
+		{
+			negocios = negocioLogica.consultarNegociosPorEstado("Activo");
+		} 
+		catch (Exception e) 
+		{	
+			e.printStackTrace();
+		}
+	}
+
+
+	public String getImage(Long idNegocio) 
+	{
+		
+		try 
+		{
+
+			Negocio negocio = negocioLogica.consultarNegocio(Long.valueOf(idNegocio));
+			String encoded = Base64.getEncoder().encodeToString(negocio.getImgPrincipal());
+			String ruta = "data:image/png;base64," + encoded;
+			return ruta;
+
 		} 
 		catch (Exception e) 
 		{
@@ -72,15 +140,21 @@ public class DirectorioVista
 		return null;
 		
 	}
+		
 	
-	
-	public List<TipoNegocio> getTipoNegocios() 
+	public List<SelectItem> getTipoNegocios() 
 	{
 		try 
 		{
 			if(tipoNegocios==null)
 			{
-				tipoNegocios = tipoNegocioLogica.consultarTodos();
+				List<TipoNegocio> ptiposNegocios = tipoNegocioLogica.consultarTodos();
+				tipoNegocios = new ArrayList<SelectItem>();
+				for (TipoNegocio tipoNegocio : ptiposNegocios) 
+				{
+					SelectItem item = new SelectItem(tipoNegocio.getIdTipoNegocio(), tipoNegocio.getNombre());
+					tipoNegocios.add(item);
+				}	
 			}
 		} 
 		catch (Exception e) 
@@ -90,16 +164,18 @@ public class DirectorioVista
 		return tipoNegocios;
 	}
 	
-	public void setTipoNegocios(List<TipoNegocio> tipoNegocios) {
+	public void setTipoNegocios(List<SelectItem> tipoNegocios) {
 		this.tipoNegocios = tipoNegocios;
 	}
+	
 	public List<Negocio> getNegocios() 
 	{
 		try 
 		{
 			if(negocios==null)
 			{
-				negocios = negocioLogica.consultarTodos();
+				negocios = negocioLogica.consultarNegociosPorEstado("Activo");
+				
 			}
 		} 
 		catch (Exception e) 
@@ -107,6 +183,8 @@ public class DirectorioVista
 			//handle error
 		}
 		return negocios;
+		
+		
 	}
 	public void setNegocios(List<Negocio> negocios) {
 		this.negocios = negocios;
@@ -126,6 +204,71 @@ public class DirectorioVista
 	public void setNegocioSeleccionado(Negocio negocioSeleccionado) {
 		this.negocioSeleccionado = negocioSeleccionado;
 	}
+
+
+	public SelectOneMenu getSomTipoNegocio() {
+		return somTipoNegocio;
+	}
+
+
+	public void setSomTipoNegocio(SelectOneMenu somTipoNegocio) {
+		this.somTipoNegocio = somTipoNegocio;
+	}
+
+
+	public List<SelectItem> getCategoriasProd() 
+	{
+		try 
+		{
+			if(categoriasProd==null)
+			{
+				List<CategoriaProd> pcategoriasProd = categoriaProdLogica.consultarTodos();
+				categoriasProd = new ArrayList<SelectItem>();
+				for (CategoriaProd categoriaProd : pcategoriasProd) 
+				{
+					SelectItem item = new SelectItem(categoriaProd.getIdCategoria(), categoriaProd.getNombre());
+					categoriasProd.add(item);
+				}	
+			}
+		} 
+		catch (Exception e) 
+		{
+			//handle error
+		}
+		return categoriasProd;
+	}
+
+
+	public void setCategoriasProd(List<SelectItem> categoriasProd) {
+		this.categoriasProd = categoriasProd;
+	}
+
+
+	public SelectOneMenu getSomCategoriaProd() {
+		return somCategoriaProd;
+	}
+
+
+	public void setSomCategoriaProd(SelectOneMenu somCategoriaProd) {
+		this.somCategoriaProd = somCategoriaProd;
+	}
+
+	public InputText getTxtBuscar() 
+	{
+		return txtBuscar;
+	}
+
+	public void setTxtBuscar(InputText txtBuscar) {
+		this.txtBuscar = txtBuscar;
+	}
+
+	
+
+	
+	
+	
+	
+	
 
 
 

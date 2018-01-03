@@ -16,7 +16,7 @@ public class TipoNot implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="TIPO_NOT_IDTIPONOT_GENERATOR", sequenceName="TIPO_NOT")
+	@SequenceGenerator(name="TIPO_NOT_IDTIPONOT_GENERATOR", sequenceName="SEQ_TIPO_NOT",allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="TIPO_NOT_IDTIPONOT_GENERATOR")
 	@Column(name="id_tipo_not", unique=true, nullable=false, precision=2)
 	private long idTipoNot;

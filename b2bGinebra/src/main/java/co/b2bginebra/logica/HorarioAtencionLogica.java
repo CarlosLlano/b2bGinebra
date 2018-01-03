@@ -68,5 +68,10 @@ public class HorarioAtencionLogica
 	{
 		return horarioAtencionDAO.consultarTodos();
 	}
+	
+	public List<HorarioAtencion> consultarHorariosPorNegocio(Long idNegocio)
+    {
+		return horarioAtencionDAO.consultarHorariosPorNegocio(idNegocio);
+    }
 
 }

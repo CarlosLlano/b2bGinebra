@@ -48,7 +48,7 @@ public class JpaDaoImpl<T, PK extends Serializable> implements Dao<T, PK> {
 
 	@Override
 	public void borrar(T entity) {
-		entityManager.remove(entity);
+		entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
 
 	}
 

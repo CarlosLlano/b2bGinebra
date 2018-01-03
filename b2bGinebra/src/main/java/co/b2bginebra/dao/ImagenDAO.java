@@ -1,6 +1,9 @@
 package co.b2bginebra.dao;
 
 
+import java.util.List;
+
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,5 +22,12 @@ public class ImagenDAO extends JpaDaoImpl<Imagen, Long>{
 	{
 		super(Imagen.class);
 	}
+    
+    public List<Imagen> consultarImagenesPorNegocio(Long idNegocio)
+    {
+    	
+    		String jpql = "SELECT i FROM Imagen i WHERE i.negocio.idNegocio=:idNegocio";
+		return entityManager.createQuery(jpql, Imagen.class).setParameter("idNegocio", idNegocio).getResultList();
+    }
     
 }

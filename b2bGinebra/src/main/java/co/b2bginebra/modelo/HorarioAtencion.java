@@ -15,7 +15,7 @@ public class HorarioAtencion implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="HORARIO_ATENCION_IDHORARIO_GENERATOR", sequenceName="HORARIO_ATENCION")
+	@SequenceGenerator(name="HORARIO_ATENCION_IDHORARIO_GENERATOR", sequenceName="SEQ_HORARIO_ATENCION",allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="HORARIO_ATENCION_IDHORARIO_GENERATOR")
 	@Column(name="id_horario", unique=true, nullable=false, precision=6)
 	private long idHorario;

@@ -15,7 +15,7 @@ public class Oferta implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="OFERTA_IDOFERTA_GENERATOR", sequenceName="OFERTA")
+	@SequenceGenerator(name="OFERTA_IDOFERTA_GENERATOR", sequenceName="SEQ_OFERTA",allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="OFERTA_IDOFERTA_GENERATOR")
 	@Column(name="id_oferta", unique=true, nullable=false, precision=6)
 	private long idOferta;

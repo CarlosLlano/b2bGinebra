@@ -1,6 +1,8 @@
 package co.b2bginebra.logica;
 
+import java.util.Calendar;
 import java.util.Properties;
+
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -12,6 +14,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import co.b2bginebra.modelo.SolicitudReg;
+import co.b2bginebra.modelo.Usuario;
+import co.b2bginebra.seguridad.CipherTools;
 
 @Stateless
 public class GestionCorreosLogica
@@ -20,6 +24,55 @@ public class GestionCorreosLogica
 	private ParametroSistemaLogica parametroSistemaLogica;
 
 
+	
+	public void enviarCorreoResetPassword(Usuario usuario)
+	{
+		try 
+		{
+			//Parametros de envio
+			String sender = parametroSistemaLogica.consultarParametroPorNombre("Correo Institucional").getValor();
+			String mailhost = parametroSistemaLogica.consultarParametroPorNombre("host-correo").getValor();
+			String userId = parametroSistemaLogica.consultarParametroPorNombre("UserId-correo").getValor();
+			String password = parametroSistemaLogica.consultarParametroPorNombre("Password-correo").getValor();
+			
+			//ruta
+			Calendar fecha = Calendar.getInstance();
+			String cambioUnico = fecha.get(Calendar.HOUR_OF_DAY)+""+
+					  fecha.get(Calendar.DAY_OF_MONTH)+""+
+					  fecha.get(Calendar.MONTH)+""+fecha.get(Calendar.YEAR);
+			String parametro = CipherTools.encriptar(usuario.getIdUsuario()+";"+cambioUnico);
+			
+			String mensaje = "Cordial Saludo,\n" 
+					+ "De click en el siguiente link para cambiar su clave de acceso:\n" 
+					+ "http://localhost:8080/b2bGinebra-0.0.1-SNAPSHOT/cambiarContrasena.xhtml?recover="
+					+ parametro;
+			sendMail("Cambio de Contraseña", mensaje, sender, usuario.getCorreo(), mailhost, userId, password);
+		} 
+		catch (Exception e) 
+		{
+			
+		}
+	}
+	
+	public void enviarCorreoContacto(String mensaje)
+	{
+		try 
+		{
+			//Parametros de envio
+			String sender = parametroSistemaLogica.consultarParametroPorNombre("Correo Institucional").getValor();
+			String mailhost = parametroSistemaLogica.consultarParametroPorNombre("host-correo").getValor();
+			String userId = parametroSistemaLogica.consultarParametroPorNombre("UserId-correo").getValor();
+			String password = parametroSistemaLogica.consultarParametroPorNombre("Password-correo").getValor();
+			
+			sendMail("Correo de contacto", mensaje, sender, sender, mailhost, userId, password);
+		} 
+		catch (Exception e) 
+		{
+			
+		}
+	}
+	
+	
 	public void enviarCorreo(String destinatarios, String Asunto, String mensaje)
 	{
 		try 
@@ -48,9 +101,10 @@ public class GestionCorreosLogica
 			String userId = parametroSistemaLogica.consultarParametroPorNombre("UserId-correo").getValor();
 			String password = parametroSistemaLogica.consultarParametroPorNombre("Password-correo").getValor();
 			
+			
+			
 			//Se envia correo a la Alcaldia informando que alguien quiere registrarse
-			String mensaje = parametroSistemaLogica.consultarParametroPorNombre("mensaje solicitud").getValor();
-			String body = mensaje  +  "\n" + "Datos de la solicitud: " + "\n" + solicitudReg.getDescripcion();
+			String body = "\n" + "Datos de la solicitud: " + "\n" + solicitudReg.getDescripcion();
 			sendMail("Solicitud de registro enviada", body, sender, sender, mailhost, userId, password);
 			
 		} 

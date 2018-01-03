@@ -1,143 +1,259 @@
 package co.b2bginebra.presentacion;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.Part;
 
-import org.primefaces.event.FileUploadEvent;
-import org.primefaces.event.SelectEvent;
+import org.omnifaces.util.Ajax;
+import org.primefaces.context.RequestContext;
 
+import co.b2bginebra.logica.CategoriaProdLogica;
 import co.b2bginebra.logica.NotificacionLogica;
 import co.b2bginebra.logica.TipoNotLogica;
+import co.b2bginebra.modelo.CategoriaProd;
+import co.b2bginebra.modelo.Negocio;
 import co.b2bginebra.modelo.Notificacion;
 import co.b2bginebra.modelo.TipoNot;
-import net.bootsfaces.component.inputText.InputText;
-import net.bootsfaces.component.inputTextarea.InputTextarea;
+import co.b2bginebra.modelo.Usuario;
+import co.b2bginebra.seguridad.JsfSecurityTools;
 import net.bootsfaces.component.selectOneMenu.SelectOneMenu;
+import net.bootsfaces.utils.FacesMessages;
 
 /**
  * representa la vista usada para gestionar notificaciones (crear, modificar, borrar, ver todas)
  *
  */
-@ManagedBean
+@ManagedBean(name="notificacionVista")
 @ViewScoped
 public class NotificacionVista 
 {
-	private InputText txtNombre;
-	private InputTextarea txtDescripcion;
+	private String txtNombre;
+	private String txtDescripcion;
+	private Part file; 
 	private byte[] imagen;
-	private Date fechaCreacion;
 	private Date fechaTerminacion;
 	private SelectOneMenu somTipoNotificacion;
+	private SelectOneMenu somCategoriaProd;
 	
-	private List<TipoNot> notificaciones;
 	private List<SelectItem> losItemsTipoNotificacion;
-	private Notificacion notificacionSeleccionada;
+	private List<SelectItem> categoriasProd;
+	
+	
+	//negocio del usuario logueado
+	private Negocio negocio;
 	
 	
 	@EJB
 	private NotificacionLogica notificacionLogica;
 	@EJB
 	private TipoNotLogica tipoNotLogica;
+	@EJB
+	private CategoriaProdLogica categoriaProdLogica;
 	
+	@PostConstruct
+	public void init()
+	{
+		Usuario usuario = (Usuario) JsfSecurityTools.getfromSession("usuario");
+		negocio = usuario.getNegocios().get(0);
+
+	}
 	
 	public void crear()
 	{
 		try 
 		{
 			Notificacion notificacion = new Notificacion();
-			notificacion.setNombre(txtNombre.getValue().toString());
-			notificacion.setDescripcion(txtDescripcion.getValue().toString());
+			notificacion.setNombre(txtNombre);
+			notificacion.setDescripcion(txtDescripcion);
 			notificacion.setImagen(imagen);
-			notificacion.setFechaCreacion(fechaCreacion);
+			notificacion.setFechaCreacion(new Date());
 			notificacion.setFechaTerminacion(fechaTerminacion);
-			notificacion.setTipoNot(tipoNotLogica.consultarTipoNot(Long.parseLong(somTipoNotificacion.getValue().toString())));
+			notificacion.setNegocio(negocio);
+			notificacion.setCategoriaProd(categoriaProdLogica.consultarCategoriaProd(Long.parseLong(somCategoriaProd.getValue().toString())));
+			notificacion.setTipoNot(tipoNotLogica.consultarTipoNot(Long.parseLong(somTipoNotificacion.getValue().toString())));	
 			
 			notificacionLogica.crearNotificacion(notificacion);
+			limpiar();
+			Ajax.update("formulario:notificaciones");
+			Ajax.update("formulario:infoNot");
+			RequestContext.getCurrentInstance().scrollTo("formulario:bottom");
 		} 
 		catch (Exception e) 
 		{
-			// TODO: handle exception
+			mostrarMensaje(e.getMessage());
 		}
 			
 	}
-	
-	//solo aplica para las notificacion propias
-	public void modificar()
-	{
-		try 
-		{
-			notificacionSeleccionada.setNombre(txtNombre.getValue().toString());
-			notificacionSeleccionada.setDescripcion(txtDescripcion.getValue().toString());
-			notificacionSeleccionada.setImagen(imagen);
-			notificacionSeleccionada.setFechaCreacion(fechaCreacion);
-			notificacionSeleccionada.setFechaTerminacion(fechaTerminacion);
-			notificacionSeleccionada.setTipoNot(tipoNotLogica.consultarTipoNot(Long.parseLong(somTipoNotificacion.getValue().toString())));
-			
-			notificacionLogica.modificarNotificacion(notificacionSeleccionada);
-		}
-		catch (Exception e) 
-		{
-			// TODO: handle exception
-		}
 
-	}
-	
-	public void borrar()
+	public void borrar(Notificacion notificacion)
 	{
 		try 
 		{
-			notificacionLogica.borrarNotificacion(notificacionSeleccionada);
+			
+			notificacionLogica.borrarNotificacion(notificacion);
+			Ajax.update("formulario:notificaciones");
 		} 
 		catch (Exception e) 
 		{
-			
+			mostrarMensaje(e.getMessage());
 		}
 		
 	}
 	
-	public void subirImagen(FileUploadEvent event)
+	public void limpiar()
 	{
-		FacesMessage mensaje = new FacesMessage();
-	
-		try 
-		{	
-			imagen = event.getFile().getContents();
-			
-			mensaje.setSeverity(FacesMessage.SEVERITY_INFO);
-			mensaje.setSummary("Imagen subida correctamente");
-		} 
-		catch (Exception e)
-		{
-			mensaje.setSeverity(FacesMessage.SEVERITY_ERROR);
-			mensaje.setSummary("Error al subir la imagen");		
-		}
-		FacesContext.getCurrentInstance().addMessage("Mensaje", mensaje);
+		txtNombre = "";
+		txtDescripcion = "";
+		somCategoriaProd.resetValue();
+		somTipoNotificacion.resetValue();
+		imagen = null;
+		fechaTerminacion = null;
+		
+	}
+
+	public Part getFile() {
+		return file;
+	}
+
+	public void setFile(Part file) {
+		this.file = file;
 	}
 	
-	public List<TipoNot> getNotificaciones() 
+	public void uploadImagen() 
 	{
-		try 
+		if(file != null)
 		{
-			if(notificaciones==null)
+			try 
 			{
-				notificacionLogica.consultarTodos();
+				//validar
+				if(validateFile(file))
+				{
+					//leer
+					Scanner scanner = new Scanner(file.getInputStream());
+					imagen = new byte[(int)file.getSize()];
+					InputStream in = file.getInputStream();
+					in.read(imagen); 
+					scanner.close();	
+					
+					
+					Ajax.update("formulario:panelImagen");
+					
+				}
+				else
+				{
+					mostrarMensaje("El archivo debe ser una imagen (jpeg)");
+				}
+			} 
+			catch (IOException e) 
+			{
+				mostrarMensaje("Ocurrio un error al subir la imagen");
 			}
-			
+		}
+		else
+		{
+			mostrarMensaje("Debe seleccionar una imagen (jpeg)");
+		}	
+	}
+	public boolean validateFile(Part file) 
+	{
+		if(file!= null)
+		{
+			if (file.getContentType().equals("image/jpeg")==false) 
+			{
+				return false;
+			}
+		}
+		return true;
+	
+	}
+	
+	public void mostrarMensaje(String mensaje)
+	{
+		FacesMessages.info(mensaje);		
+	}
+
+	public String getImagen() 
+	{
+		try 
+		{
+			String encoded = Base64.getEncoder().encodeToString(imagen);
+			String ruta = "data:image/png;base64," + encoded;
+			return ruta;
+
 		} 
 		catch (Exception e) 
 		{
-			// TODO: handle exception
+			
 		}
-		
-		return notificaciones;
+		return null;
+	}
+
+	public String getTxtNombre() {
+		return txtNombre;
+	}
+
+	public void setTxtNombre(String txtNombre) {
+		this.txtNombre = txtNombre;
+	}
+
+	public String getTxtDescripcion() {
+		return txtDescripcion;
+	}
+
+	public void setTxtDescripcion(String txtDescripcion) {
+		this.txtDescripcion = txtDescripcion;
+	}
+
+	public Date getFechaTerminacion() {
+		return fechaTerminacion;
+	}
+
+	public void setFechaTerminacion(Date fechaTerminacion) {
+		this.fechaTerminacion = fechaTerminacion;
+	}
+
+	public SelectOneMenu getSomCategoriaProd() {
+		return somCategoriaProd;
+	}
+
+	public void setSomCategoriaProd(SelectOneMenu somCategoriaProd) {
+		this.somCategoriaProd = somCategoriaProd;
+	}
+
+	public List<SelectItem> getCategoriasProd() {
+		try 
+		{
+			if(categoriasProd==null)
+			{
+				List<CategoriaProd> pcategoriasProd = categoriaProdLogica.consultarTodos();
+				categoriasProd = new ArrayList<SelectItem>();
+				for (CategoriaProd categoriaProd : pcategoriasProd) 
+				{
+					SelectItem item = new SelectItem(categoriaProd.getIdCategoria(), categoriaProd.getNombre());
+					categoriasProd.add(item);
+				}	
+			}
+		} 
+		catch (Exception e) 
+		{
+			//handle error
+		}
+		return categoriasProd;
+	}
+
+	public void setCategoriasProd(List<SelectItem> categoriasProd) {
+		this.categoriasProd = categoriasProd;
 	}
 
 	public List<SelectItem> getLosItemsTipoNotificacion()
@@ -157,24 +273,65 @@ public class NotificacionVista
 			}
 		} 
 		catch (Exception e) {
-			// TODO: handle exception
+			
 		}
 		
 		return losItemsTipoNotificacion;
 	}
 
-
-
-
 	public void setLosItemsTipoNotificacion(List<SelectItem> losItemsTipoNotificacion) {
 		this.losItemsTipoNotificacion = losItemsTipoNotificacion;
 	}
 	
-	public void seleccionarNotificacion(SelectEvent event)
+	
+
+	public SelectOneMenu getSomTipoNotificacion() {
+		return somTipoNotificacion;
+	}
+
+	public void setSomTipoNotificacion(SelectOneMenu somTipoNotificacion) {
+		this.somTipoNotificacion = somTipoNotificacion;
+	}
+
+	public List<Notificacion> getNotificaciones() 
 	{
-		notificacionSeleccionada = (Notificacion)event.getObject();
+		return notificacionLogica.consultarNotificacionPorNegocio(negocio.getIdNegocio());
+	}
+	
+	public List<Notificacion> getTodasNotificaciones()
+	{
+		try 
+		{
+			List<Notificacion> notificaciones = notificacionLogica.consultarTodos();
+			return notificaciones;
+		} 
+		catch (Exception e) 
+		{
+			return null;
+		}
 		
 	}
+	
+	public String getImage(Long idNotificacion) 
+	{
+		
+		try 
+		{
+
+			Notificacion not = notificacionLogica.consultarNotificacion(idNotificacion);
+			String encoded = Base64.getEncoder().encodeToString(not.getImagen());
+			String ruta = "data:image/png;base64," + encoded;
+			return ruta;
+
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
 	
 
 }

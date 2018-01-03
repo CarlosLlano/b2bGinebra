@@ -16,7 +16,7 @@ public class TipoEstado implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="TIPO_ESTADO_IDTIPOESTADO_GENERATOR", sequenceName="TIPO_ESTADO")
+	@SequenceGenerator(name="TIPO_ESTADO_IDTIPOESTADO_GENERATOR", sequenceName="SEQ_TIPO_ESTADO",allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="TIPO_ESTADO_IDTIPOESTADO_GENERATOR")
 	@Column(name="id_tipo_estado", unique=true, nullable=false, precision=3)
 	private long idTipoEstado;

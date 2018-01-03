@@ -3,6 +3,8 @@ package co.b2bginebra.dao;
 
 
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,5 +22,18 @@ public class SolicitudRegDAO extends JpaDaoImpl<SolicitudReg, Long>{
     public SolicitudRegDAO()
 	{
 		super(SolicitudReg.class);
+	}
+    
+    public List<SolicitudReg> consultarSolicitudPorEstado(long idEstado)
+    {
+    		String jpql = "SELECT s FROM SolicitudReg s WHERE s.estado.idEstado=:idEstado";
+    		return entityManager.createQuery(jpql, SolicitudReg.class).setParameter("idEstado", idEstado).getResultList();
+  
+    }
+    
+    public List<SolicitudReg> consultarSolicitudesPorNombreEstado(String nombreEstado)
+	{
+    		String jpql = "SELECT s FROM SolicitudReg s WHERE s.estado.nombre=:nombreEstado";
+		return entityManager.createQuery(jpql, SolicitudReg.class).setParameter("nombreEstado", nombreEstado).getResultList();
 	}
 }

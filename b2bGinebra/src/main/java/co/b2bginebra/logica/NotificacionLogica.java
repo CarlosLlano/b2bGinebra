@@ -39,6 +39,18 @@ public class NotificacionLogica
 		{
 			throw new Exception("La fecha de terminacion es obligatoria");
 		}
+		if(notificacion.getNegocio()==null)
+		{
+			throw new Exception("El negocio es obligatorio");
+		}
+		if(notificacion.getCategoriaProd()==null)
+		{
+			throw new Exception("La categoria de producto es obligatoria");
+		}
+		if(notificacion.getTipoNot()==null)
+		{
+			throw new Exception("El tipo de notificacion es obligatorio");
+		}
 		
 	}
 	
@@ -73,4 +85,8 @@ public class NotificacionLogica
 		return notificacionDAO.consultarTodos();
 	}
 
+	public List<Notificacion> consultarNotificacionPorNegocio(Long idNegocio)
+    {
+		return notificacionDAO.consultarNotificacionPorNegocio(idNegocio);
+    }
 }

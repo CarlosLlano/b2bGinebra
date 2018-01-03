@@ -25,6 +25,7 @@ public class ParametroSistemaDAO extends JpaDaoImpl<ParametroSistema, Long>{
     
     public ParametroSistema consultarParametroPorNombre(String nombre)
     {
+    		
     		String jpql = "SELECT p FROM ParametroSistema p WHERE p.nombre=:nombre";
 		return entityManager.createQuery(jpql, ParametroSistema.class).setParameter("nombre", nombre).getSingleResult();
     }

@@ -16,7 +16,7 @@ public class Negocio implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="NEGOCIO_IDNEGOCIO_GENERATOR", sequenceName="NEGOCIO")
+	@SequenceGenerator(name="NEGOCIO_IDNEGOCIO_GENERATOR", sequenceName="SEQ_NEGOCIO",allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="NEGOCIO_IDNEGOCIO_GENERATOR")
 	@Column(name="id_negocio", unique=true, nullable=false, precision=6)
 	private long idNegocio;
@@ -43,11 +43,11 @@ public class Negocio implements Serializable {
 	private String telefono;
 
 	//bi-directional many-to-one association to HorarioAtencion
-	@OneToMany(mappedBy="negocio")
+	@OneToMany(cascade=CascadeType.ALL,mappedBy="negocio",orphanRemoval=true)
 	private List<HorarioAtencion> horarioAtencions;
 
 	//bi-directional many-to-one association to Imagen
-	@OneToMany(mappedBy="negocio")
+	@OneToMany(cascade=CascadeType.ALL,mappedBy="negocio",orphanRemoval=true)
 	private List<Imagen> imagens;
 
 	//bi-directional many-to-one association to Estado
@@ -66,7 +66,7 @@ public class Negocio implements Serializable {
 	private TipoNegocio tipoNegocio;
 
 	//bi-directional many-to-one association to Usuario
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="usuario_id_usuario", nullable=false)
 	private Usuario usuario;
 
@@ -75,7 +75,7 @@ public class Negocio implements Serializable {
 	private List<Notificacion> notificacions;
 
 	//bi-directional many-to-one association to Oferta
-	@OneToMany(mappedBy="negocio")
+	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.EAGER,mappedBy="negocio",orphanRemoval=true)
 	private List<Oferta> ofertas;
 
 	//bi-directional many-to-one association to SolicitudReg
@@ -293,7 +293,7 @@ public class Negocio implements Serializable {
 	
 	public String toString()
 	{
-		return "razon social: " + razonSocial + ", direccion: " + direccion + ", telefono: " + telefono + ", correo: " + correo;
+		return "RAZON SOCIAL: " + razonSocial + ", DIRECCION: " + direccion + ", TELEFONO: " + telefono + ", CORREO: " + correo;
 	}
 
 }

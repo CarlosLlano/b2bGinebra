@@ -5,15 +5,18 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.primefaces.context.RequestContext;
+
 import co.b2bginebra.logica.UsuarioLogica;
 import co.b2bginebra.modelo.Usuario;
+import co.b2bginebra.seguridad.JsfSecurityTools;
 import net.bootsfaces.component.inputText.InputText;
 
 /**
  * representa la vista para la gestion de informacion de un usuario
  *
  */
-@ManagedBean
+@ManagedBean(name="usuarioVista")
 @ViewScoped
 public class UsuarioVista 
 {
@@ -22,8 +25,10 @@ public class UsuarioVista
 	private InputText txtDireccion;
 	private InputText txtCorreo;
 	private InputText txtTelefono;
-	private InputText txtPassword;
 	
+	
+	//Errores
+	private String modalText;
 	
 	private Usuario usuLogueado;
 	
@@ -33,30 +38,39 @@ public class UsuarioVista
     @PostConstruct
     public void postConstruct() 
     {   
-    		txtNombre.setValue(usuLogueado.getNombre());
-    		txtDireccion.setValue(usuLogueado.getDireccion());
-    		txtCorreo.setValue(usuLogueado.getCorreo());
-    		txtTelefono.setValue(usuLogueado.getTelefono());
-    		txtPassword.setValue(usuLogueado.getPassword());
     	
+    	    usuLogueado = (Usuario) JsfSecurityTools.getfromSession("usuario");
+    	    
+    	    txtNombre = new InputText();
+    	    txtDireccion = new InputText();
+    	    txtCorreo = new InputText();
+    	    txtTelefono = new InputText();
+    	   
+    	   
+    	    txtNombre.setValue(usuLogueado.getNombre().toString());
+    	    txtDireccion.setValue(usuLogueado.getDireccion().toString());
+    	    txtCorreo.setValue(usuLogueado.getCorreo().toString());
+    	    txtTelefono.setValue(usuLogueado.getTelefono().toString());
+
     }
 	
 	
 	public void cambiarInformacionPersonal()
 	{
-		usuLogueado.setNombre(txtNombre.getValue().toString());
+		usuLogueado.setNombre(txtNombre.getValue().toString());	
 		usuLogueado.setDireccion(txtDireccion.getValue().toString());
 		usuLogueado.setCorreo(txtCorreo.getValue().toString());
 		usuLogueado.setTelefono(txtTelefono.getValue().toString());
-		usuLogueado.setPassword(txtPassword.getValue().toString());
+		
 		
 		try
 		{
 			usuarioLogica.modificarUsuario(usuLogueado);
+			mostrarMensaje("Informacion actualizada");
 		} 
 		catch (Exception e) 
 		{
-			// TODO: handle exception
+			mostrarMensaje(e.getMessage());
 		}
 		
 	}
@@ -102,14 +116,7 @@ public class UsuarioVista
 	}
 
 
-	public InputText getTxtPassword() {
-		return txtPassword;
-	}
-
-
-	public void setTxtPassword(InputText txtPassword) {
-		this.txtPassword = txtPassword;
-	}
+	
 
 
 	public Usuario getUsuLogueado() {
@@ -121,6 +128,21 @@ public class UsuarioVista
 		this.usuLogueado = usuLogueado;
 	}
 	
+	public void mostrarMensaje(String mensaje)
+	{
+		RequestContext context = RequestContext.getCurrentInstance();
+		setModalText(mensaje);
+		String codigo = "$('.modalPseudoClass').modal()";
+		context.execute(codigo);
+	}
+	
+	public String getModalText() {
+		return modalText;
+	}
+	
+	public void setModalText(String modalText) {
+		this.modalText = modalText;
+	}
 	
 	
 

@@ -32,7 +32,7 @@ public class UsuarioLogica
 		}
 		if(usuario.getTelefono()==null || usuario.getTelefono().equals(""))
 		{
-			throw new Exception("el telegono es obligatorio");
+			throw new Exception("el telefono es obligatorio");
 		}
 		if(usuario.getDireccion()==null || usuario.getDireccion().equals(""))
 		{
@@ -90,25 +90,61 @@ public class UsuarioLogica
 		return usuarioDAO.consultarTodos();
 	}
 	
+	//usado en el login
 	public Usuario validarUsuario(String usuLogin, String usuClave) throws Exception
 	{
+		
 		Usuario usuario = usuarioDAO.consultarUsuarioPorIdentificacion(usuLogin);
 		if(usuario==null)
 		{
+			
 			throw new Exception("Usuario o password no valido");
 		}
 		else if(usuario.getPassword().equals(usuClave)==false)
 		{
+			
 			throw new Exception("Usuario o password no valido");
 		}
 		else if(usuario.getEstado().getNombre().equals("Activo")==false)
 		{
+			
 			throw new Exception("La cuenta esta bloqueada");
 		}
 		else
 		{
+			
 			return usuario;
 		}
 	}
-
+	
+	//usado en el registro
+	public void existeUsuario(String usuLogin, String usuCorreo) throws Exception
+	{
+		Usuario usuario = usuarioDAO.consultarUsuarioPorIdentificacion(usuLogin);
+		Usuario usu = usuarioDAO.consultarUsuarioPorCorreo(usuCorreo);
+		
+		if(usuario != null)
+		{
+			throw new Exception("Ya existe una cuenta con la cedula especificada");
+		}
+		if(usu != null)
+		{
+			throw new Exception("Ya existe una cuenta con el correo especificado");
+		}
+	}
+	
+	public Usuario darUsuarioConCorreo(String usuCorreo) 
+	{
+		return  usuarioDAO.consultarUsuarioPorCorreo(usuCorreo);
+	}
+	
+	public List<Usuario> consultarUsuariosPorEstado(String nombreEstado)
+	{
+		return usuarioDAO.consultarUsuariosPorEstado(nombreEstado);
+	}
+	
+	public List<Usuario> consultarUsuariosPorIdEstado(long idEstado)
+	{
+		return usuarioDAO.consultarUsuariosPorIdEstado(idEstado);
+	}
 }

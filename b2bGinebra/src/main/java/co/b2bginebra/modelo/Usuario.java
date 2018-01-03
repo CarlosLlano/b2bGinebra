@@ -16,7 +16,7 @@ public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="USUARIO_IDUSUARIO_GENERATOR", sequenceName="USUARIO")
+	@SequenceGenerator(name="USUARIO_IDUSUARIO_GENERATOR", sequenceName="SEQ_USUARIO",allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="USUARIO_IDUSUARIO_GENERATOR")
 	@Column(name="id_usuario", unique=true, nullable=false, precision=6)
 	private long idUsuario;
@@ -40,7 +40,7 @@ public class Usuario implements Serializable {
 	private String telefono;
 
 	//bi-directional many-to-one association to Negocio
-	@OneToMany(mappedBy="usuario")
+	@OneToMany(fetch = FetchType.EAGER,mappedBy="usuario")
 	private List<Negocio> negocios;
 
 	//bi-directional many-to-one association to Estado
@@ -139,7 +139,7 @@ public class Usuario implements Serializable {
 	
 	public String toString()
 	{
-		return "nombre: " + nombre + ", identificacion: " + identificacion + ", telefono: " + telefono + ", direccion: " + direccion + ", correo: " + correo;
+		return "NOMBRE: " + nombre + ", IDENTIFICACION: " + identificacion + ", TELEFONO: " + telefono + ", DIRECCION: " + direccion + ", CORREO: " + correo;
 	}
 	
 }
