@@ -7,7 +7,7 @@ docker-compose up -d
 
 *Acceso en Linux y Windows*: http://localhost:8080/b2bGinebra/inicio.xhtml
 
-*Acceso en versiones diferentes de Windows 10 pro y enterprise*: http://192.168.99.100:8080/b2bGinebra/inicio.xhtml
+*Acceso en versiones Windows diferentes de Windows 10 pro y enterprise*: http://192.168.99.100:8080/b2bGinebra/inicio.xhtml
 
 
 
