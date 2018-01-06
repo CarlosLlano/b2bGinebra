@@ -7,3 +7,4 @@
 /WebContent/assets
 /WebContent/META-INF
 *.DS_Store
+*.ucls
