@@ -25,7 +25,7 @@ public class GestionCorreosLogica
 
 
 	
-	public void enviarCorreoResetPassword(Usuario usuario)
+	public void enviarCorreoResetPassword(Usuario usuario, String ruta)
 	{
 		try 
 		{
@@ -44,9 +44,8 @@ public class GestionCorreosLogica
 			
 			String mensaje = "Cordial Saludo,\n" 
 					+ "De click en el siguiente link para cambiar su clave de acceso:\n" 
-					+ "http://localhost:8080/b2bGinebra-0.0.1-SNAPSHOT/cambiarContrasena.xhtml?recover="
-					+ parametro;
-			sendMail("Cambio de Contraseña", mensaje, sender, usuario.getCorreo(), mailhost, userId, password);
+					+ ruta + "?recover=" + parametro;
+			sendMail("Password reset", mensaje, sender, usuario.getCorreo(), mailhost, userId, password);
 		} 
 		catch (Exception e) 
 		{

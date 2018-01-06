@@ -1,5 +1,6 @@
 package co.b2bginebra.presentacion;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -64,8 +65,7 @@ public class ConfiguracionVista
 	private Usuario usuCambioPassword;
 	
 	public void verificarPlazoParaCambioPassword()
-	{
-		
+	{				
 		HttpServletRequest origRequest = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		String parametro = origRequest.getParameter("recover");
 		
@@ -88,8 +88,7 @@ public class ConfiguracionVista
 				if(usu!=null && cambioUnico.equals(desincriptado[1]))
 				{
 					//continuar en la vista
-					usuCambioPassword = usu;
-					
+					usuCambioPassword = usu;	
 				}
 				else
 				{
@@ -100,6 +99,19 @@ public class ConfiguracionVista
 			}
 			catch(Exception e)
 			{
+				
+			}
+		}
+		else
+		{
+            try 
+            {
+	            	//redirect access denied
+	    			ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+				externalContext.redirect("home.xhtml?faces-redirect=true");
+			} 
+            catch (IOException e) 
+            {
 				
 			}
 		}
@@ -143,8 +155,15 @@ public class ConfiguracionVista
 			}
 			else
 			{
+				//ruta
+				String protocol = FacesContext.getCurrentInstance().getExternalContext().getRequestScheme();
+				String serverName = FacesContext.getCurrentInstance().getExternalContext().getRequestServerName();
+				int serverPort = FacesContext.getCurrentInstance().getExternalContext().getRequestServerPort();
+				String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
 				
-				gestionCorreosLogica.enviarCorreoResetPassword(usuario);
+				String ruta = protocol+ "://" + serverName + ":" + serverPort + contextPath + "/cambiarContrasena.xhtml";
+				
+				gestionCorreosLogica.enviarCorreoResetPassword(usuario,ruta);
 				mostrarMensaje("Consulte su correo para continuar con el proceso de cambio "
 						+ "de contraseña");
 			}
