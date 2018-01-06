@@ -1,6 +1,5 @@
 package co.b2bginebra.presentacion;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -23,6 +22,7 @@ import co.b2bginebra.modelo.Estado;
 import co.b2bginebra.modelo.ParametroSistema;
 import co.b2bginebra.modelo.Usuario;
 import co.b2bginebra.seguridad.CipherTools;
+
 import net.bootsfaces.component.inputText.InputText;
 import net.bootsfaces.component.selectOneMenu.SelectOneMenu;
 import net.bootsfaces.utils.FacesMessages;
@@ -65,18 +65,19 @@ public class ConfiguracionVista
 	private Usuario usuCambioPassword;
 	
 	public void verificarPlazoParaCambioPassword()
-	{				
+	{		
 		HttpServletRequest origRequest = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		String parametro = origRequest.getParameter("recover");
-		
-		if(parametro!=null && parametro.trim().equals("")==false)
+
+		//la url tiene el parametro recover
+		if(parametro!=null && parametro.trim().equals("")==false) 
 		{
 			Calendar fecha = Calendar.getInstance();
 			String cambioUnico = fecha.get(Calendar.HOUR_OF_DAY)+""+
 					  fecha.get(Calendar.DAY_OF_MONTH)+""+
 					  fecha.get(Calendar.MONTH)+""+fecha.get(Calendar.YEAR);
 			
-			
+			parametro = parametro.replace(" ", "+");
 			String[] desincriptado = CipherTools.desencriptar(parametro).split(";");
 			
 			
@@ -88,7 +89,8 @@ public class ConfiguracionVista
 				if(usu!=null && cambioUnico.equals(desincriptado[1]))
 				{
 					//continuar en la vista
-					usuCambioPassword = usu;	
+					usuCambioPassword = usu;
+					
 				}
 				else
 				{
@@ -102,24 +104,7 @@ public class ConfiguracionVista
 				
 			}
 		}
-		else
-		{
-            try 
-            {
-	            	//redirect access denied
-	    			ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-				externalContext.redirect("home.xhtml?faces-redirect=true");
-			} 
-            catch (IOException e) 
-            {
-				
-			}
-		}
-		
-		
-		
 	}
-	
 	public void modificarParametro()
 	{
 		try 
@@ -183,7 +168,7 @@ public class ConfiguracionVista
 			try 
 			{
 				usuarioLogica.modificarUsuario(usuCambioPassword);
-
+				
 				ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();	
 	            externalContext.redirect("inicio.xhtml?faces-redirect=true");
 			} 

@@ -209,7 +209,7 @@ public class GestionCorreosLogica
 			}
 
 			Transport.send(message);
-			System.out.println("correo enviado correctamente");
+			
 		} 
 		catch (Exception e) 
 		{
