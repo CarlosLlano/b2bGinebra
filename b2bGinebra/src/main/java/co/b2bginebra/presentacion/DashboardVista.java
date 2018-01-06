@@ -113,8 +113,10 @@ public class DashboardVista
 				temp.add(new PointAmountStat(tipoNegocio.getNombre(), negocios.size()));
 				
 				
+				
 			}
-			Collections.sort(pointAmountStats);
+			Collections.sort(temp);
+			
 			
 			for(int i = 0; i < 5; i++)
 			{
