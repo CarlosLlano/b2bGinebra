@@ -2,9 +2,9 @@ package co.b2bginebra.presentacion;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -15,7 +15,6 @@ import co.b2bginebra.logica.SolicitudRegLogica;
 import co.b2bginebra.logica.TipoNegocioLogica;
 import co.b2bginebra.logica.UsuarioLogica;
 import co.b2bginebra.modelo.Negocio;
-import co.b2bginebra.modelo.TipoNegocio;
 import co.b2bginebra.presentacion.api.PointAmountStat;
 
 /**
@@ -32,7 +31,7 @@ public class DashboardVista
 {
 
 	private List<Negocio> negocios;
-	private List<TipoNegocio> tipos;
+	
 	
 	@EJB
 	private TipoNegocioLogica tipoNegocioLogica;
@@ -45,18 +44,7 @@ public class DashboardVista
 	@EJB
 	private SolicitudRegLogica solicitudRegLogica;
 		
-	@PostConstruct
-	public void init()
-	{
-		try 
-		{
-			tipos = tipoNegocioLogica.consultarTodos();
-		}
-		catch (Exception e) 
-		{
-			
-		}
-	}
+	
 	public List<Negocio> getNegocios() 
 	{
 		try 
@@ -104,23 +92,26 @@ public class DashboardVista
 	public List<PointAmountStat> getEstadisticaTipoNegocio() 
 	{
 		List<PointAmountStat> pointAmountStats = new ArrayList<PointAmountStat>();
+		
 		try
 		{
 			List<PointAmountStat> temp = new ArrayList<PointAmountStat>();
-			for (TipoNegocio tipoNegocio : tipos) 
+			List<Negocio> negocios = negocioLogica.consultarTodos();
+			
+			HashMap<String, Integer> hasmap = new HashMap<String, Integer>(100);
+			for (Negocio neg : negocios) 
 			{
-				List<Negocio> negocios = negocioLogica.consultarPorTipoCategoriaYNombre(tipoNegocio.getIdTipoNegocio(), -1, "");
-				temp.add(new PointAmountStat(tipoNegocio.getNombre(), negocios.size()));
-				
-				
+				String tipoNombre = neg.getTipoNegocio().getNombre();
+				int cantidad = hasmap.get(tipoNombre)==null? 0 : hasmap.get(tipoNombre);
+				hasmap.put(tipoNombre, cantidad + 1);
 				
 			}
-			Collections.sort(temp);
 			
+			hasmap.forEach((k,v) -> temp.add(new PointAmountStat(k, v)));
+			Collections.sort(temp);
 			
 			for(int i = 0; i < 5; i++)
 			{
-				
 				pointAmountStats.add(temp.get(i));
 			}
 		}
