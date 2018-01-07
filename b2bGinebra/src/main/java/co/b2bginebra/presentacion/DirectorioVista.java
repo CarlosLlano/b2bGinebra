@@ -1,6 +1,7 @@
 package co.b2bginebra.presentacion;
 
 import java.util.ArrayList;
+
 import java.util.Base64;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 
+import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.event.SelectEvent;
 
 import co.b2bginebra.logica.CategoriaProdLogica;
@@ -18,7 +20,7 @@ import co.b2bginebra.modelo.CategoriaProd;
 import co.b2bginebra.modelo.Negocio;
 import co.b2bginebra.modelo.TipoNegocio;
 import net.bootsfaces.component.inputText.InputText;
-import net.bootsfaces.component.selectOneMenu.SelectOneMenu;
+
 
 
 /**

@@ -44,7 +44,7 @@ public class NotificacionVista
 	private byte[] imagen;
 	private Date fechaTerminacion;
 	private SelectOneMenu somTipoNotificacion;
-	private SelectOneMenu somCategoriaProd;
+	private org.primefaces.component.selectonemenu.SelectOneMenu somCategoriaProd;
 	
 	private List<SelectItem> losItemsTipoNotificacion;
 	private List<SelectItem> categoriasProd;
@@ -223,11 +223,11 @@ public class NotificacionVista
 		this.fechaTerminacion = fechaTerminacion;
 	}
 
-	public SelectOneMenu getSomCategoriaProd() {
+	public org.primefaces.component.selectonemenu.SelectOneMenu getSomCategoriaProd() {
 		return somCategoriaProd;
 	}
-
-	public void setSomCategoriaProd(SelectOneMenu somCategoriaProd) {
+	
+	public void setSomCategoriaProd(org.primefaces.component.selectonemenu.SelectOneMenu somCategoriaProd) {
 		this.somCategoriaProd = somCategoriaProd;
 	}
 

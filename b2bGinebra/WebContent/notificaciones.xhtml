@@ -20,7 +20,7 @@
 				</div>
 				<br/>
 				<br/>
-				<b:tabView activeIndex="2">
+				<b:tabView activeIndex="2" id="tabView">
 				  <b:tab title="Mis Notificaciones">
 				  		<br />
 				  		<br />
@@ -34,12 +34,14 @@
 								<b:panel title="Datos" look="primary" collapsible="false">
 									<b:inputText placeholder="Nombre" value="#{notificacionVista.txtNombre}"/>
 							    		<b:inputTextarea placeholder="Descripcion" value="#{notificacionVista.txtDescripcion}" maxlength="500"/>
-							    		<b:selectOneMenu id="somCategoriaProd"  binding="#{notificacionVista.somCategoriaProd}" 
+							    		<p:selectOneMenu id="somCategoriaProd"  binding="#{notificacionVista.somCategoriaProd}" filter="true" style="font-size:11pt;width:100%"
 													label="Categoria de producto" label-style="font-size: 10pt;">
 										<f:selectItem itemValue="-1" itemLabel="TODAS LAS CATEGORIAS DE PRODUCTO" />
 										<f:selectItems value="#{notificacionVista.categoriasProd}" />
-									</b:selectOneMenu>
-							    		<br />
+									</p:selectOneMenu>
+							    		<div>
+							    			<br />
+							    		</div>
 									<b:selectOneMenu id="somTipoNot" class="somTipoNot" binding="#{notificacionVista.somTipoNotificacion}" 
 													label="Tipo de Notificacion" label-style="font-size: 10pt;" medium-screen="6">
 										<f:selectItem itemValue="-1" itemLabel="TODOS" />
@@ -121,6 +123,8 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/js/lightbox.min.js"></script>
 		<script src="assets/js/Profile-Edit.js"></script>
 		<script src="assets/js/Sidebar-Menu.js"></script>
+		
+		
 	</h:form>
 </f:view>
 </ui:define>

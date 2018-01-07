@@ -48,11 +48,14 @@
 							<b:inputText placeholder="Teléfono" value="#{registroVista.txtNegTelefono}" />
 							<b:inputText placeholder="Sitio web (Opcional)" value="#{registroVista.txtNegSitioWeb}" />
 							<b:inputText placeholder="Correo" value="#{registroVista.txtNegCorreo}" type="email" />
-							<b:selectOneMenu id="somTipoNegocio" binding="#{registroVista.somTipoNegocio}">
+							<p:selectOneMenu id="somTipoNegocio" binding="#{registroVista.somTipoNegocio}" filter="true" style="font-size:11pt; width:100%">
 								<f:selectItem itemValue="-1" itemLabel="Elija el tipo de negocio que mejor se ajuste" />
 								<f:selectItems value="#{registroVista.tipoNegocios}" />
-							</b:selectOneMenu>
-							<b:inputTextarea placeholder="Descripción" maxlength="500" value="#{registroVista.txtNegDescripcion}" />
+							</p:selectOneMenu>
+							<div>
+								<br />
+								<b:inputTextarea placeholder="Descripción" maxlength="500" value="#{registroVista.txtNegDescripcion}" />
+							</div>
 							<p:outputLabel value="Imagen" style="font-size:12pt"/>
 							<h:inputFile id="file" value="#{registroVista.file}" style="font-size:11pt;color:#333333;" />
 							<br/>

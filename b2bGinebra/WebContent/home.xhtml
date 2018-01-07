@@ -10,7 +10,7 @@
 <ui:composition template="/WEB-INF/plantilla/template.xhtml" >
 <ui:define name="body">
 <f:view>
-	<h:form>
+	<h:form id="formulario">
 		
 	    <h1></h1>   
 	    <b:container fluid="true"> 
@@ -18,20 +18,27 @@
 			    <b:column medium-screen="2">
 			    		<h4>Tipo negocio</h4>
 			    </b:column>
-			    <b:selectOneMenu id="somTipoNegocio"  binding="#{directorioVista.somTipoNegocio}" large-screen="one-third" >
+			    <div class="col-md-3">
+			    <p:selectOneMenu id="somTipo" binding="#{directorioVista.somTipoNegocio}" style="font-size:11pt" filter="true" >
 					<f:selectItem itemValue="-1" itemLabel="TODOS LOS TIPOS DE NEGOCIO" />
 					<f:selectItems value="#{directorioVista.tipoNegocios}" />
-					<f:ajax listener="#{directorioVista.somTipoNegocioOnChange}" render="somCategoriaProd" />
-				</b:selectOneMenu>
+					<f:ajax listener="#{directorioVista.somTipoNegocioOnChange}" render="formulario:render" />
+				</p:selectOneMenu>
+				</div>
+			    
 		 	</b:row>
 		 	<b:row>
 			    <b:column medium-screen="2">
 			      <h4>Categoria de producto</h4>
 			    </b:column>
-			    <b:selectOneMenu id="somCategoriaProd"  binding="#{directorioVista.somCategoriaProd}"  large-screen="one-third" >
-					<f:selectItem itemValue="-1" itemLabel="TODAS LAS CATEGORIAS DE PRODUCTO" />
-					<f:selectItems value="#{directorioVista.categoriasProd}" />
-				</b:selectOneMenu>
+			    <div class="col-md-3">
+				    <h:panelGroup id="render">
+					    <p:selectOneMenu id="somCategoriaProd" binding="#{directorioVista.somCategoriaProd}" filter="true"  style="font-size:11pt">
+							<f:selectItem itemValue="-1" itemLabel="TODAS LAS CATEGORIAS DE PRODUCTO" />
+							<f:selectItems value="#{directorioVista.categoriasProd}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+				</div>
 		 	</b:row>
 		 	<b:row>
 				 	<b:column medium-screen="2">
@@ -95,12 +102,12 @@
 		</div>
 		
 		
-		
-	    <script src="assets/js/jquery.min.js"></script>
 	    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/js/lightbox.min.js"></script>
 	    <script src="assets/js/Profile-Edit.js"></script>
 	    <script src="assets/js/Sidebar-Menu.js"></script>
+		
+	   
 	</h:form>
 </f:view>
 </ui:define>

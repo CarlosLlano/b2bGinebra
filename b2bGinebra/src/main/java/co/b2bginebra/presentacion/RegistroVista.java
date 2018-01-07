@@ -1,6 +1,7 @@
 package co.b2bginebra.presentacion;
 
 import java.io.IOException;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -17,6 +18,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.Part;
 
+import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.context.RequestContext;
 
 import co.b2bginebra.logica.EstadoLogica;
@@ -31,7 +33,6 @@ import co.b2bginebra.modelo.Negocio;
 import co.b2bginebra.modelo.SolicitudReg;
 import co.b2bginebra.modelo.TipoNegocio;
 import co.b2bginebra.modelo.Usuario;
-import net.bootsfaces.component.selectOneMenu.SelectOneMenu;
 import net.bootsfaces.utils.FacesMessages;
 
 
