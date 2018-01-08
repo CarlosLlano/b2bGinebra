@@ -1,10 +1,13 @@
 package co.b2bginebra.logica;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+
+import org.apache.commons.lang3.StringUtils;
 
 import co.b2bginebra.dao.NegocioDAO;
 import co.b2bginebra.modelo.Negocio;
@@ -125,7 +128,7 @@ public class NegocioLogica
 							if(oferta.getCategoriaProd().getIdCategoria()==idCategoriaProd)
 							{
 								parar = true;
-								if(nombre.equals("") || negocio.getRazonSocial().contains(nombre))
+								if(nombre.equals("") || StringUtils.containsIgnoreCase(nombre, negocio.getRazonSocial()))
 								{
 									respuesta.add(negocio);
 								}
