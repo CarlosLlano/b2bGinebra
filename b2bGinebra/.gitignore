@@ -6,5 +6,6 @@
 .project
 /WebContent/assets
 /WebContent/META-INF
+/Users
 *.DS_Store
 *.ucls
