@@ -20,4 +20,4 @@
 
 **DEMO**
 
-[![frame-demo-javaee-app](https://user-images.githubusercontent.com/17281733/42674629-2d330aee-8636-11e8-9e98-ac4c7fadbb4d.png)](https://www.youtube.com/watch?v=gG0xlLuyDi4)
+[![screenshot-app](https://user-images.githubusercontent.com/17281733/42716707-76656608-86c2-11e8-8058-5ed467427954.png)](https://www.youtube.com/watch?v=gG0xlLuyDi4)
