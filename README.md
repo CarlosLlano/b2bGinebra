@@ -1,6 +1,5 @@
 # PROYECTO DE GRADO #
 
-***Presentado por: Carlos Llano y Emmanuel Bolaños***
 
 **IMPLEMENTACIÓN**
 
