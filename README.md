@@ -1,6 +1,6 @@
 # PROYECTO DE GRADO #
 
-Live demo: https://www.comercioginebravalle.co/
+Live demo: ![https://www.comercioginebravalle.co/](https://www.comercioginebravalle.co/)
 
 **IMPLEMENTACIÓN**
 
